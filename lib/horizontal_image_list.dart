@@ -54,7 +54,7 @@ class _HorizontalImageListState extends State<HorizontalImageList> with SingleTi
                       widget.imageUrls[index],
                       height: widget.imageHeight,
                       width: widget.imageWidth,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           height: widget.imageHeight,
