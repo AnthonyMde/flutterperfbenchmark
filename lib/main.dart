@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:statsfl/statsfl.dart';
 import 'horizontal_image_list.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(StatsFl(
+    maxFps: 60,
+    align: Alignment.topCenter,
+    child: MyApp(),));
 }
 
 class MyApp extends StatelessWidget {
