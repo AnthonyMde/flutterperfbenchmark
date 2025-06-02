@@ -1,27 +1,41 @@
 import Flutter
 import UIKit
 
-@main
+class TTIDFlutterViewController: FlutterViewController {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let launchTime = Date().timeIntervalSince(launchStart)
+        print("🔥🔥🔥 TTID: \(launchTime) seconds")
+    }
+}
+
 @objc class AppDelegate: FlutterAppDelegate {
 
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    let controller = FlutterViewController()
-    controller.view.backgroundColor = .white
-    
-    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-      window = UIWindow(windowScene: windowScene)
-      window?.rootViewController = controller
-      window?.makeKeyAndVisible()
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication
+            .LaunchOptionsKey: Any]?
+    ) -> Bool {
+        print("🕓🕓🕓 TTID: App launched at \(launchStart)")
+        let controller = TTIDFlutterViewController()
+        controller.view.backgroundColor = .white
+
+        if let windowScene = UIApplication.shared.connectedScenes.first
+            as? UIWindowScene
+        {
+            window = UIWindow(windowScene: windowScene)
+            window?.rootViewController = controller
+            window?.makeKeyAndVisible()
+        }
+
+        GeneratedPluginRegistrant.register(with: self)
+        FPSCounter.showInStatusBar()
+
+        return super.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
     }
-    
-    GeneratedPluginRegistrant.register(with: self)
-    FPSCounter.showInStatusBar()
-    
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
 }
 public class FPSCounter: NSObject {
 
@@ -49,7 +63,6 @@ public class FPSCounter: NSObject {
         }
     }
 
-
     // MARK: - Initialization
 
     private let displayLink: CADisplayLink
@@ -76,7 +89,6 @@ public class FPSCounter: NSObject {
         self.displayLink.invalidate()
     }
 
-
     // MARK: - Configuration
 
     /// The delegate that should receive FPS updates.
@@ -84,7 +96,6 @@ public class FPSCounter: NSObject {
 
     /// Delay between FPS updates. Longer delays mean more averaged FPS numbers.
     @objc public var notificationDelay: TimeInterval = 1.0
-
 
     // MARK: - Tracking
 
@@ -103,7 +114,10 @@ public class FPSCounter: NSObject {
     ///   - runloop: The runloop to start tracking in
     ///   - mode:    The mode(s) to track in the runloop
     ///
-    @objc public func startTracking(inRunLoop runloop: RunLoop = .main, mode: RunLoop.Mode = .common) {
+    @objc public func startTracking(
+        inRunLoop runloop: RunLoop = .main,
+        mode: RunLoop.Mode = .common
+    ) {
         self.stopTracking()
 
         self.runloop = runloop
@@ -122,7 +136,6 @@ public class FPSCounter: NSObject {
         self.runloop = nil
         self.mode = nil
     }
-
 
     // MARK: - Handling Frame Updates
 
@@ -153,7 +166,6 @@ public class FPSCounter: NSObject {
     }
 }
 
-
 /// The delegate protocol for the FPSCounter class.
 ///
 /// Implement this protocol if you want to receive updates from a `FPSCounter`.
@@ -174,10 +186,10 @@ class FPSStatusBarViewController: UIViewController {
     fileprivate let fpsCounter = FPSCounter()
     private let label = UILabel()
 
-
     // MARK: - Initialization
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
+    {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
         self.commonInit()
@@ -190,8 +202,11 @@ class FPSStatusBarViewController: UIViewController {
     }
 
     private func commonInit() {
-        NotificationCenter.default.addObserver(self,
-            selector: #selector(FPSStatusBarViewController.updateStatusBarFrame(_:)),
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(
+                FPSStatusBarViewController.updateStatusBarFrame(_:)
+            ),
             name: UIApplication.didChangeStatusBarOrientationNotification,
             object: nil
         )
@@ -201,17 +216,23 @@ class FPSStatusBarViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
 
-
     // MARK: - View Lifecycle and Events
 
     override func loadView() {
-        self.view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0))
+        self.view = UIView(
+            frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 100.0)
+        )
 
         let font = UIFont.boldSystemFont(ofSize: 10.0)
         let rect = self.view.bounds.insetBy(dx: 10.0, dy: 0.0)
 
-        self.label.frame = CGRect(x: rect.origin.x, y: rect.maxY - font.lineHeight - 1.0, width: rect.width, height: font.lineHeight)
-        self.label.autoresizingMask = [ .flexibleWidth, .flexibleTopMargin ]
+        self.label.frame = CGRect(
+            x: rect.origin.x,
+            y: rect.maxY - font.lineHeight - 1.0,
+            width: rect.width,
+            height: font.lineHeight
+        )
+        self.label.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         self.label.font = font
         self.view.addSubview(self.label)
 
@@ -220,11 +241,15 @@ class FPSStatusBarViewController: UIViewController {
 
     @objc func updateStatusBarFrame(_ notification: Notification) {
         let application = notification.object as? UIApplication
-        let frame = CGRect(x: 0.0, y: 0.0, width: application?.keyWindow?.bounds.width ?? 0.0, height: 20.0)
+        let frame = CGRect(
+            x: 0.0,
+            y: 0.0,
+            width: application?.keyWindow?.bounds.width ?? 0.0,
+            height: 20.0
+        )
 
         FPSStatusBarViewController.statusBarWindow.frame = frame
     }
-
 
     // MARK: - Getting the shared status bar window
 
@@ -236,12 +261,14 @@ class FPSStatusBarViewController: UIViewController {
     }()
 }
 
-
 // MARK: - FPSCounterDelegate
 
 extension FPSStatusBarViewController: FPSCounterDelegate {
 
-    @objc func fpsCounter(_ counter: FPSCounter, didUpdateFramesPerSecond fps: Int) {
+    @objc func fpsCounter(
+        _ counter: FPSCounter,
+        didUpdateFramesPerSecond fps: Int
+    ) {
         self.resignKeyWindowIfNeeded()
 
         let milliseconds = 1000 / max(fps, 1)
@@ -269,8 +296,7 @@ extension FPSStatusBarViewController: FPSCounterDelegate {
     }
 }
 
-
-public extension FPSCounter {
+extension FPSCounter {
 
     // MARK: - Show FPS in the status bar
 
@@ -284,18 +310,21 @@ public extension FPSCounter {
     ///   - runloop:     The `NSRunLoop` to use when tracking FPS. Default is the main run loop
     ///   - mode:        The run loop mode to use when tracking. Default uses `RunLoop.Mode.common`
     ///
-    @objc class func showInStatusBar(
+    @objc public class func showInStatusBar(
         application: UIApplication = .shared,
         runloop: RunLoop = .main,
         mode: RunLoop.Mode = .common
     ) {
         let window = FPSStatusBarViewController.statusBarWindow
-        if let windowScene = application.connectedScenes.first as? UIWindowScene {
+        if let windowScene = application.connectedScenes.first as? UIWindowScene
+        {
             window.frame = windowScene.statusBarManager?.statusBarFrame ?? .zero
         }
         window.isHidden = false
 
-        if let controller = window.rootViewController as? FPSStatusBarViewController {
+        if let controller = window.rootViewController
+            as? FPSStatusBarViewController
+        {
             controller.fpsCounter.startTracking(
                 inRunLoop: runloop,
                 mode: mode
@@ -305,10 +334,12 @@ public extension FPSCounter {
 
     /// Removes the label that shows the current FPS from the status bar.
     ///
-    @objc class func hide() {
+    @objc public class func hide() {
         let window = FPSStatusBarViewController.statusBarWindow
 
-        if let controller = window.rootViewController as? FPSStatusBarViewController {
+        if let controller = window.rootViewController
+            as? FPSStatusBarViewController
+        {
             controller.fpsCounter.stopTracking()
             window.isHidden = true
         }
@@ -316,7 +347,7 @@ public extension FPSCounter {
 
     /// Returns wether the FPS counter is currently visible or not.
     ///
-    @objc class var isVisible: Bool {
+    @objc public class var isVisible: Bool {
         return !FPSStatusBarViewController.statusBarWindow.isHidden
     }
 }
@@ -328,5 +359,3 @@ class FPStatusBarWindow: UIWindow {
         return false
     }
 }
-
-
