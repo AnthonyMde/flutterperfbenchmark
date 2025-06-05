@@ -44,7 +44,6 @@ class _HorizontalImageListState extends State<HorizontalImageList> with SingleTi
         itemCount: widget.imageUrls.length,
         itemBuilder: (context, index) {
           return ClipRRect(
-              borderRadius: BorderRadius.circular(8),
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {
