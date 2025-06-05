@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:statsfl/statsfl.dart';
 import 'horizontal_image_list.dart';
+import 'dart:ui' as ui;
 
 void main() {
-  runApp(StatsFl(
-    maxFps: 60,
-    align: Alignment.topCenter,
-    child: MyApp(),));
+  runApp(
+    StatsFl(
+      maxFps: ui.PlatformDispatcher.instance.displays.first.refreshRate.round(),
+      align: Alignment.topCenter,
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -60,7 +64,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // Generate 30 sample image URLs for each list
-  final generateImageUrls = List.generate(30, (index) => ['image1.jpg', 'image2.jpeg', 'image3.jpeg'][index % 3]);
+  final generateImageUrls = List.generate(
+    30,
+    (index) => ['image1.jpg', 'image2.jpeg', 'image3.jpeg'][index % 3],
+  );
 
   @override
   Widget build(BuildContext context) {
