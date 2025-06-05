@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:statsfl/statsfl.dart';
 import 'horizontal_image_list.dart';
-import 'dart:ui' as ui;
 
 void main() {
-  runApp(
-    StatsFl(
-      maxFps: ui.PlatformDispatcher.instance.displays.first.refreshRate.round(),
-      align: Alignment.topCenter,
-      child: MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
