@@ -37,6 +37,10 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    dependencies {
+        implementation("jp.wasabeef:takt:2.1.1")
+    }
 }
 
 flutter {
